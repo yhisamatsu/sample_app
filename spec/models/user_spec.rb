@@ -74,8 +74,6 @@ describe User do
     it { should_not be_valid }
   end
 
-<<<<<<< HEAD
-=======
   describe "email address with mixed case" do
     let(:mixed_case_email) { "Foo@ExAMPle.CoM" }
 
@@ -86,7 +84,6 @@ describe User do
     end
   end
 
->>>>>>> modeling-users
   describe "when password is not present" do
     before { @user.password = @user.password_confirmation = " " }
     it { should_not be_valid }
