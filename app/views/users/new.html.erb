@@ -3,22 +3,27 @@
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_for(@user) do |f| %>
+    <%= form_tag(users_path) do %>
       <%= render 'shared/error_messages' %>
 
-      <%= f.label :name %>
-      <%= f.text_field :name %>
+      <%= label_tag 'user_name', 'Name' %>
+      <%= text_field_tag 'user[name]', nil,
+          { id: 'user_name', size: 30, type: 'text' } %>
 
-      <%= f.label :email %>
-      <%= f.text_field :email %>
+      <%= label_tag 'user_email', 'Email' %>
+      <%= text_field_tag 'user[email]', nil,
+          { id: 'user_email', size: 30, type: 'text' } %>
 
-      <%= f.label :password %>
-      <%= f.password_field :password %>
+      <%= label_tag 'user_password', 'Password' %>
+      <%= password_field_tag 'user[password]', nil,
+          { id: 'user_password', size: 30, type: 'password' } %>
 
-      <%= f.label :password_confirmation, "Confirmation" %>
-      <%= f.password_field :password_confirmation %>
+      <%= label_tag 'user_password_confirmation', "Confirmation" %>
+      <%= password_field_tag 'user[password_confirmation]', nil,
+          { id: 'user_password_confirmation', size: 30, type: 'password' } %>
 
-      <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
+      <%= submit_tag "Create my account", { class: "btn btn-large btn-primary",
+                                              name: 'commit', type: 'submit' }%>
     <% end %>
   </div>
 </div>

@@ -6,9 +6,13 @@ def valid_signin(user)
   click_button "Sign in"
 end
 
-Rspec::Matchers.define :have_error_message do |message|
-  match do |page|
-    page.should have_selector('div.alert.alert-error', text: message)
+{ have_error_message:   'div.alert.alert-error',
+  have_success_message: 'div.alert.alert-success',
+  have_h1:              'h1',
+  have_title:           'title' }.each do |helper, attribute|
+  Rspec::Matchers.define helper do |message|
+    match do |page|
+      page.should have_selector(attribute, text: message)
+    end
   end
 end
-
