@@ -6,6 +6,13 @@ def valid_signin(user)
   click_button "Sign in"
 end
 
+def sign_in(user)
+  visit signin_path
+  valid_signin(user)
+  # Sign in when not using Capybara as well.
+  cookies[:remember_token] = user.remember_token
+end
+
 { have_error_message:   'div.alert.alert-error',
   have_success_message: 'div.alert.alert-success',
   have_h1:              'h1',
