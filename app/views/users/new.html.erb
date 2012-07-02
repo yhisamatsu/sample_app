@@ -3,27 +3,9 @@
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_tag(users_path) do %>
-      <%= render 'shared/error_messages' %>
-
-      <%= label_tag 'user_name', 'Name' %>
-      <%= text_field_tag 'user[name]', nil,
-          { id: 'user_name', size: 30, type: 'text' } %>
-
-      <%= label_tag 'user_email', 'Email' %>
-      <%= text_field_tag 'user[email]', nil,
-          { id: 'user_email', size: 30, type: 'text' } %>
-
-      <%= label_tag 'user_password', 'Password' %>
-      <%= password_field_tag 'user[password]', nil,
-          { id: 'user_password', size: 30, type: 'password' } %>
-
-      <%= label_tag 'user_password_confirmation', "Confirmation" %>
-      <%= password_field_tag 'user[password_confirmation]', nil,
-          { id: 'user_password_confirmation', size: 30, type: 'password' } %>
-
-      <%= submit_tag "Create my account", { class: "btn btn-large btn-primary",
-                                              name: 'commit', type: 'submit' }%>
+    <%= form_for(@user) do |f| %>
+      <%= render "fields", f: f %>
+      <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
     <% end %>
   </div>
 </div>

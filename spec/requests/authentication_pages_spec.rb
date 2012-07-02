@@ -3,16 +3,12 @@ require 'spec_helper'
 describe "Authentication" do
 
   subject { page }
-  
+
   describe "signin page" do
     before { visit signin_path }
 
     it { should have_h1 'Sign in' }
     it { should have_title 'Sign in' }
-  end
-
-  describe "signin" do
-    before { visit signin_path }
 
     describe "with invalid information" do
       before { click_button "Sign in" }
@@ -42,7 +38,12 @@ describe "Authentication" do
 
       describe "followed by signout" do
         before { click_link "Sign out" }
+
         it { should have_link('Sign in', href: signin_path) }
+
+        it { should_not have_link('Profile', href: user_path(user)) }
+        it { should_not have_link('Settings', href: edit_user_path(user)) }
+
       end
     end
   end
@@ -65,6 +66,19 @@ describe "Authentication" do
           it "should render the desired protected page" do
             page.should have_title('Edit user')
           end
+
+          describe "when signing in again" do
+            before do
+              visit signin_path
+              fill_in "Email", with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+            end
+
+            it "should render the default (profile) page" do
+              page.should have_title(user.name)
+            end
+          end
         end
       end
 
@@ -84,6 +98,22 @@ describe "Authentication" do
           before { visit users_path }
           it { should have_title 'Sign in' }
         end
+
+        describe "after signing in" do
+          before { sign_in(user) }
+          describe "visiting the signup page" do
+            before { visit signup_path }
+            it { should have_h1 'Sample App' }
+          end
+          
+          describe "submitting to the create action" do
+            before { post users_path(name: "New User",
+                                     email: "newuser@example.com",
+                                     password: "newfoobar",
+                                     password_confirmation: "newfoobar") }
+            specify { response.should redirect_to(root_path) }
+          end
+        end
       end
     end
 
@@ -97,7 +127,7 @@ describe "Authentication" do
         it { should_not have_title full_title('Edit user') }
       end
 
-      describe"submitting a PUT request to the Users#update action" do
+      describe "submitting a PUT request to the Users#update action" do
         before { put user_path(wrong_user) }
         specify { response.should redirect_to(root_path) }
       end
@@ -111,6 +141,17 @@ describe "Authentication" do
 
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
+        specify { response.should redirect_to(root_path) }
+      end
+    end
+
+    describe "as admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+
+      before { sign_in admin }
+
+      describe "submitting a DELETE request to admin itself" do
+        before { delete user_path(admin) }
         specify { response.should redirect_to(root_path) }
       end
     end
