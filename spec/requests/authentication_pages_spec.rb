@@ -101,9 +101,10 @@ describe "Authentication" do
 
         describe "after signing in" do
           before { sign_in(user) }
+
           describe "visiting the signup page" do
-            before { visit signup_path }
-            it { should have_h1 'Sample App' }
+            before { get signup_path }
+            specify { response.should redirect_to(root_path) }
           end
           
           describe "submitting to the create action" do
@@ -113,6 +114,19 @@ describe "Authentication" do
                                      password_confirmation: "newfoobar") }
             specify { response.should redirect_to(root_path) }
           end
+        end
+      end
+
+      describe "in the Microposts controller" do
+
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { response.should redirect_to(signin_path) }
         end
       end
     end
