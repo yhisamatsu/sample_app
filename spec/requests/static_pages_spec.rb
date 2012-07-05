@@ -33,6 +33,21 @@ describe "Static pages" do
           page.should have_selector("li##{item.id}", text: item.content)
         end
       end
+
+      describe "count microposts with valid pluralization" do
+
+        describe "2 microposts" do
+          it { should have_content('2 microposts') }
+        end
+
+        describe "1 micropost" do
+          before do
+            user.microposts.first.destroy
+            visit root_path
+          end
+          it { should have_content('1 micropost') }
+        end
+      end
     end
   end
 

@@ -71,6 +71,15 @@ describe "User Pages" do
       it { should have_content(m1.content) }
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
+
+      describe "as a wrong user" do
+        let(:wrong_user) { FactoryGirl.create(:user) }
+        let!(:mw) do FactoryGirl.create(:micropost,
+                                        user: wrong_user, content: "Foobar")
+        end
+        
+        it { should_not have_content(mw.content) }
+      end
     end
   end
 

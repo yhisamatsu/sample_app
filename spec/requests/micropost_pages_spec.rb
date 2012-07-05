@@ -42,4 +42,24 @@ describe "Micropost pages" do
       end
     end
   end
+
+  describe "microposts pagination" do
+    before do
+      FactoryGirl.create(:micropost, user: user, content: "First post")
+      50.times { FactoryGirl.create(:micropost, user: user) }
+    end
+
+    before { visit root_path }
+
+    describe "page 1" do
+      it { should_not have_content('First post') }
+      it { should have_content('Next') }
+    end
+
+    describe "page 2" do
+      before { click_link "Next" }
+
+      it { should have_content('First post') }
+    end
+  end
 end
