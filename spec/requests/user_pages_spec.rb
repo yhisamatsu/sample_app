@@ -104,6 +104,18 @@ describe "User Pages" do
         describe "toggling the button" do
           before { click_button "Follow" }
           it { should have_selector('input', value: 'Unfollow') }
+
+          describe "change the user's stat" do
+            before { visit user_path(user) }
+            it { should have_link("1 following",
+                                  href: following_user_path(user)) }
+          end
+
+          describe "change the other user's stat" do
+            before { visit user_path(other_user) }
+            it { should have_link("1 followers",
+                                  href: followers_user_path(other_user)) }
+          end
         end
       end
 
@@ -128,6 +140,18 @@ describe "User Pages" do
         describe "toggling the button" do
           before { click_button "Unfollow" }
           it { should have_selector('input', value: "Follow") }
+
+          describe "change the user's stat" do
+            before { visit user_path(user) }
+            it { should have_link("0 following",
+                                  href: following_user_path(user)) }
+          end
+
+          describe "change the other user's stat" do
+            before { visit user_path(other_user) }
+            it { should have_link("0 followers",
+                                  href: followers_user_path(other_user)) }
+          end
         end
       end
     end

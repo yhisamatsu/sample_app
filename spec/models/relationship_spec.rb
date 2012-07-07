@@ -34,4 +34,25 @@ describe Relationship do
     before { relationship.follower_id = nil }
     it { should_not be_valid }
   end
+
+  describe "relationship associations" do
+
+    it "should destroy associated follower" do
+      relationships = follower.relationships
+      follower.destroy
+
+      relationships.each do |r|
+        Relationship.find_by_id(r.id).should be_nil
+      end
+    end
+
+    it "should destroy associated followed user" do
+      relationships = followed.relationships
+      followed.destroy
+
+      relationships.each do |r|
+        Relationship.find_by_id(r.id).should be_nil
+      end
+    end
+  end
 end
